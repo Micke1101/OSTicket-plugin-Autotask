@@ -30,10 +30,10 @@ class AutoTaskPlugin extends Plugin {
             $vars = array(
                 'object_id' => $ticket->getId(),
                 'object_type' => 'T',
-                'description' => $ost->replaceTemplateVariables($config->get('message'), array('ticket' => $ticket)),
+                'description' => $ost->replaceTemplateVariables(str_replace('%{ticket.id}', $ticket->getId(), $config->get('message')), array('ticket' => $ticket)),
                 'default_formdata' => array(
-                    'title' => $ost->replaceTemplateVariables($config->get('subject'), array('ticket' => $ticket)),
-                    'description' => $ost->replaceTemplateVariables($config->get('message'), array('ticket' => $ticket)),
+                    'title' => $ost->replaceTemplateVariables(str_replace('%{ticket.id}', $ticket->getId(), $config->get('subject')), array('ticket' => $ticket)),
+                    'description' => $ost->replaceTemplateVariables(str_replace('%{ticket.id}', $ticket->getId(), $config->get('message')), array('ticket' => $ticket)),
                 ),
                 'internal_formdata' => array(
                     'dept_id' => $config->get('department'),

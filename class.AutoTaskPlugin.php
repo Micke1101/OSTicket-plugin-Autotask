@@ -21,17 +21,19 @@ class AutoTaskPlugin extends Plugin {
      */
     function bootstrap() {
         Signal::connect ( 'ticket.created', function (Ticket $ticket) {
-            global $thisstaff;
+            global $thisstaff, $ost;
             $config = $this->getConfig();
+			if(!array_key_exists($ticket->getTopicId(), (is_array($config->get('topics'))) ? $config->get('topics') : array($config->get('topics'))))
+				return;
             if(!$thisstaff)
                 $thisstaff = Staff::lookup($config->get('imitate'));
             $vars = array(
                 'object_id' => $ticket->getId(),
                 'object_type' => 'T',
-                'description' => $config->get('message'),
+                'description' => $ost->replaceTemplateVariables($config->get('message'), array('ticket' => $ticket)),
                 'default_formdata' => array(
-                    'title' => $config->get('subject'),
-                    'description' => $config->get('message'),
+                    'title' => $ost->replaceTemplateVariables($config->get('subject'), array('ticket' => $ticket)),
+                    'description' => $ost->replaceTemplateVariables($config->get('message'), array('ticket' => $ticket)),
                 ),
                 'internal_formdata' => array(
                     'dept_id' => $config->get('department'),

@@ -33,6 +33,7 @@ class AutoTaskPluginConfig extends PluginConfig
         list ($__, $_N) = self::translate();
         $departments = Dept::getDepartments();
         $agents = Staff::getStaffMembers();
+        $topics = Topic::getHelpTopics();
         return array(
             'assignee' => new ChoiceField([
                 'label' => $__('Assigned agent'),
@@ -47,6 +48,14 @@ class AutoTaskPluginConfig extends PluginConfig
                 'hint' => $__('If a end user is creating a ticket we need to imitate the staff member, suggested is to create a system account for this.'),
                 'default' => '',
                 'choices' => $agents
+            ]),
+			'topics' => new ChoiceField([
+                'label' => $__('Help topic'),
+                'required' => false,
+                'hint' => $__('What help topics do you want to create tasks for.'),
+                'default' => '',
+                'choices' => $topics,
+				'configuration'=>array('multiselect'=>true,'prompt'=>__('Help topic')),
             ]),
             'department' => new ChoiceField([
                 'label' => $__('Department'),
